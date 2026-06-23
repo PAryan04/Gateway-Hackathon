@@ -154,6 +154,40 @@ document.addEventListener("DOMContentLoaded", () => {
             resAction.textContent = result.suggested_action;
             resRawJson.textContent = JSON.stringify(result, null, 2);
 
+            // ── API Quota / Rate Limit Warning ────────────────────────────────
+            const existingWarning = document.getElementById('api-rate-limit-banner');
+            if (existingWarning) existingWarning.remove();
+
+            if (result.confidence === 0.0) {
+                const banner = document.createElement('div');
+                banner.id = 'api-rate-limit-banner';
+                banner.style.cssText = [
+                    'background: rgba(244, 63, 94, 0.12)',
+                    'border: 1px solid rgba(244, 63, 94, 0.4)',
+                    'border-radius: 8px',
+                    'padding: 12px 16px',
+                    'margin-top: 12px',
+                    'font-size: 0.82rem',
+                    'color: #f87171',
+                    'display: flex',
+                    'gap: 10px',
+                    'align-items: flex-start'
+                ].join(';');
+                banner.innerHTML = `
+                    <span style="font-size:1.1rem;line-height:1">&#x26A0;&#xFE0F;</span>
+                    <div>
+                        <strong>Gemini API Quota Exhausted</strong> &mdash;
+                        The triage engine returned a safe fallback (confidence = 0%). 
+                        This happens when the free-tier daily limit (1,500 req/day) is reached.
+                        <br><strong>Fix:</strong> Get a new API key at 
+                        <a href="https://aistudio.google.com/app/apikey" target="_blank" 
+                           style="color:#60a5fa">aistudio.google.com</a>, 
+                        update <code>.env</code>, and restart the server.
+                    </div>
+                `;
+                playgroundResult.appendChild(banner);
+            }
+
             // Display Results
             playgroundResult.classList.remove("hidden");
             playgroundResult.scrollIntoView({ behavior: "smooth", block: "nearest" });

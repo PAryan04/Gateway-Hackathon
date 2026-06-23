@@ -55,8 +55,8 @@ body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    overflow: auto;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -69,7 +69,7 @@ h1, h2, h3, h4, h5, h6 {
 .app-container {
     display: grid;
     grid-template-columns: 280px 1fr;
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
 }
 
@@ -79,7 +79,10 @@ h1, h2, h3, h4, h5, h6 {
     border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    height: 100%;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .sidebar-header {
@@ -198,8 +201,8 @@ h1, h2, h3, h4, h5, h6 {
 .main-content {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow-y: auto;
+    min-height: 100%;
+    overflow-y: visible;
     padding: 24px;
     gap: 20px;
 }
