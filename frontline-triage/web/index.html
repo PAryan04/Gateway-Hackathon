@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FRONTLINE AI-powered customer message triage dashboard and evaluation platform. Real-time classification, security pre-checks, and accuracy analytics.">
+    <title>FRONTLINE — AI Customer Support Triage Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar: Preloaded dataset navigation -->
+        <aside class="sidebar" id="sidebar-panel">
+            <div class="sidebar-header">
+                <h2>📥 Test Suite</h2>
+                <p>Select a preloaded message to inspect or load into the playground.</p>
+            </div>
+            <div class="message-list-container">
+                <ul class="message-list" id="preset-messages-list">
+                    <li class="loading-item">Loading preset messages...</li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            <!-- Header Banner -->
+            <header class="app-header">
+                <div class="brand">
+                    <span class="logo-icon">⚡</span>
+                    <div class="brand-text">
+                        <h1>FRONTLINE</h1>
+                        <p>AI Customer Message Triage Engine</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="status-badge" id="api-status">
+                        <span class="pulse-indicator"></span>
+                        <span class="status-text">Engine Ready</span>
+                    </div>
+                    <button class="btn btn-primary" id="btn-triage-all">
+                        🚀 Run All (Batch)
+                    </button>
+                    <button class="btn btn-secondary" id="btn-run-eval">
+                        📈 Run Evaluation
+                    </button>
+                </div>
+            </header>
+
+            <!-- Grid Layout for Dashboard Elements -->
+            <div class="dashboard-grid">
+                <!-- Row 1: Playground & Quick Triage -->
+                <section class="dashboard-card playground-card" aria-labelledby="playground-title">
+                    <h2 id="playground-title">🧪 Triage Playground</h2>
+                    <p class="card-subtitle">Test custom inputs or modify payloads in real-time.</p>
+                    
+                    <form id="playground-form" class="playground-form">
+                        <div class="form-group">
+                            <label for="message-input">Customer Message Text</label>
+                            <textarea id="message-input" name="message" placeholder="Type or paste a customer support message here..." required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="format-input">Input Format Hint</label>
+                                <select id="format-input" name="format">
+                                    <option value="text">Plain Text</option>
+                                    <option value="html">HTML Code</option>
+                                    <option value="json">JSON Object</option>
+                                    <option value="pdf">PDF Text Extraction</option>
+                                    <option value="csv">CSV Rows</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-accent btn-block" id="btn-submit-triage">
+                                Analyze Message
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Playground Response Display -->
+                    <div class="playground-result-container hidden" id="playground-result">
+                        <h3>Analysis Output</h3>
+                        <div class="result-badges">
+                            <span class="badge" id="res-category">GENERAL</span>
+                            <span class="badge" id="res-priority">P3</span>
+                            <span class="badge" id="res-needs-human">Needs Human: No</span>
+                        </div>
+                        <div class="result-details">
+                            <p><strong>Detected Lang:</strong> <span id="res-lang">en</span> | <strong>Confidence:</strong> <span id="res-confidence">95%</span></p>
+                            <p><strong>Summary:</strong> <span id="res-summary">Loading...</span></p>
+                            <p><strong>Suggested Action:</strong> <span id="res-action">Loading...</span></p>
+                        </div>
+                        <details class="raw-response-details">
+                            <summary>View Raw JSON Decision</summary>
+                            <pre><code id="res-raw-json">{}</code></pre>
+                        </details>
+                    </div>
+                </section>
+
+                <!-- Row 1 Right: Evaluation Scoreboard -->
+                <section class="dashboard-card evaluation-card" id="evaluation-center" aria-labelledby="eval-title">
+                    <h2 id="eval-title">📊 System Evaluation Metrics</h2>
+                    <p class="card-subtitle">Performance scoring measured against hand-labeled ground truths.</p>
+
+                    <div class="eval-metrics-grid" id="eval-metrics-container">
+                        <div class="metric-progress-card">
+                            <div class="metric-header">
+                                <span>Category Accuracy</span>
+                                <span class="metric-value" id="accuracy-category">--%</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="bar-category" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="metric-progress-card">
+                            <div class="metric-header">
+                                <span>Priority Accuracy</span>
+                                <span class="metric-value" id="accuracy-priority">--%</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="bar-priority" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="metric-progress-card">
+                            <div class="metric-header">
+                                <span>Escalation Accuracy</span>
+                                <span class="metric-value" id="accuracy-escalation">--%</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="bar-escalation" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="stats-row">
+                            <div class="stat-card">
+                                <div class="stat-label">Avg Latency</div>
+                                <div class="stat-value" id="stat-latency">--s</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Avg Tokens</div>
+                                <div class="stat-value" id="stat-tokens">--</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Est. Cost (USD)</div>
+                                <div class="stat-value text-accent" id="stat-cost">$0.00</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="eval-placeholder" id="eval-placeholder-text">
+                        <span class="eval-placeholder-icon">📈</span>
+                        <p>Click "Run Evaluation" above to compute accuracy scores against ground truth datasets.</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Dashboard Row 2: Live Pipeline Results -->
+            <section class="dashboard-card pipeline-results-card" aria-labelledby="dashboard-title">
+                <div class="results-header">
+                    <div>
+                        <h2 id="dashboard-title">📋 Live Message Triage Feed</h2>
+                        <p class="card-subtitle">Real-time decisions made by the ingestion and guardrail layers.</p>
+                    </div>
+                    <div class="filter-controls">
+                        <input type="text" id="dashboard-search" placeholder="Search by summary or content...">
+                        <select id="filter-category">
+                            <option value="all">All Categories</option>
+                            <option value="billing">Billing</option>
+                            <option value="technical">Technical</option>
+                            <option value="account">Account</option>
+                            <option value="security">Security</option>
+                            <option value="complaint">Complaint</option>
+                            <option value="general">General</option>
+                            <option value="out-of-scope">Out-of-Scope</option>
+                        </select>
+                        <select id="filter-human">
+                            <option value="all">All Triage States</option>
+                            <option value="human">Needs Human</option>
+                            <option value="auto">Auto-resolved</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-scroll-container">
+                    <table class="results-table" id="triage-dashboard-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">ID</th>
+                                <th style="width: 15%">Category</th>
+                                <th style="width: 10%">Priority</th>
+                                <th style="width: 12%">Needs Human</th>
+                                <th style="width: 12%">Confidence</th>
+                                <th style="width: 8%">Lang</th>
+                                <th style="width: 33%">Summary</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboard-tbody">
+                            <tr class="empty-row-placeholder">
+                                <td colspan="7">
+                                    <div class="table-empty-state">
+                                        <span>📋</span>
+                                        <p>No messages triaged in this session yet. Run batch triage above or test via the playground.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Slide-over Drawer: Detailed message analytics -->
+    <div class="drawer-overlay hidden" id="details-drawer-overlay">
+        <div class="drawer" id="details-drawer">
+            <div class="drawer-header">
+                <h2>Ticket Triage Details</h2>
+                <button class="btn-close-drawer" id="btn-close-drawer">×</button>
+            </div>
+            <div class="drawer-body" id="details-drawer-body">
+                <!-- Content injected dynamically via app.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Client-side application logic -->
+    <script src="app.js"></script>
+</body>
+</html>

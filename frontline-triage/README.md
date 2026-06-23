@@ -139,6 +139,22 @@ python main.py --single "I was charged twice this month for my subscription!"
 python main.py --evaluate
 ```
 
+### 6. Run the Web-Based Dashboard & Playground (Recommended)
+
+FRONTLINE includes a high-fidelity, responsive dark-themed web application that provides:
+- **Triage Playground**: Enter custom customer tickets, set formats, and inspect real-time JSON outputs.
+- **Live Feed Dashboard**: Run all 40 messages and search/filter/sort the results dynamically.
+- **Metrics Scoring**: Run evaluation tests and view visual graphs of category, priority, and human-escalation accuracy.
+- **Detail Drawer**: Click on any table row to see full ticket context, summaries, and actions.
+
+To run the web interface locally, execute:
+```bash
+python web_server.py
+```
+
+Then open your browser and navigate to:
+**[http://localhost:8000](http://localhost:8000)**
+
 ---
 
 ## Usage Reference

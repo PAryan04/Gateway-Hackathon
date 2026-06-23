@@ -43,8 +43,11 @@ pip install -r requirements.txt
 # Get a free Gemini API key at: https://aistudio.google.com/app/apikey
 copy .env.example .env    # then edit .env and add your key
 
-python main.py            # Run the full dashboard
+python main.py            # Run the CLI dashboard
 python main.py --evaluate # Run accuracy evaluation
+
+# Run the Web-Based Dashboard & Playground
+python web_server.py      # Opens on http://localhost:8000
 ```
 
 For full setup instructions, see [frontline-triage/README.md](frontline-triage/README.md).
