@@ -1,0 +1,62 @@
+[
+  {
+    "id": "msg_001",
+    "expected_category": "billing",
+    "expected_priority": "P2",
+    "expected_needs_human": false
+  },
+  {
+    "id": "msg_002",
+    "expected_category": "technical",
+    "expected_priority": "P2",
+    "expected_needs_human": true
+  },
+  {
+    "id": "msg_008",
+    "expected_category": "security",
+    "expected_priority": "P1",
+    "expected_needs_human": true
+  },
+  {
+    "id": "msg_009",
+    "expected_category": "general",
+    "expected_priority": "P3",
+    "expected_needs_human": false
+  },
+  {
+    "id": "msg_010",
+    "expected_category": "general",
+    "expected_priority": "P3",
+    "expected_needs_human": false
+  },
+  {
+    "id": "msg_015",
+    "expected_category": "technical",
+    "expected_priority": "P0",
+    "expected_needs_human": true
+  },
+  {
+    "id": "msg_025",
+    "expected_category": "security",
+    "expected_priority": "P0",
+    "expected_needs_human": true
+  },
+  {
+    "id": "msg_031",
+    "expected_category": "billing",
+    "expected_priority": "P1",
+    "expected_needs_human": true
+  },
+  {
+    "id": "msg_036",
+    "expected_category": "general",
+    "expected_priority": "P3",
+    "expected_needs_human": false
+  },
+  {
+    "id": "msg_037",
+    "expected_category": "security",
+    "expected_priority": "P1",
+    "expected_needs_human": true
+  }
+]
